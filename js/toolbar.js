@@ -45,6 +45,18 @@ function createButton(content, action, enableLongPress) {
                     }
                 }
             },
+            touchstart: function (event) {
+                btn.css({
+                    backgroundColor: "#ffffff"
+                });
+                if (action) {
+                    action();
+                    if (enableLongPress) {
+                        timer = setTimeout(timer_func, 500);
+                    }
+                }
+                return false;
+            },
             mouseup: function (event) {
                 btn.css({
                     backgroundColor: "#dddddd"
@@ -53,6 +65,16 @@ function createButton(content, action, enableLongPress) {
                     clearTimeout(timer);
                     timer = null;
                 }
+            },
+            touchend: function (event) {
+                btn.css({
+                    backgroundColor: "#dddddd"
+                });
+                if (timer) {
+                    clearTimeout(timer);
+                    timer = null;
+                }
+                return false;
             },
             selectstart: function (event) {
                 return false;

@@ -1,9 +1,7 @@
 $(document).ready(function () {
-    var prob = new SlitherlinkProblem(10, 10);
-    prob.setClue(0, 0, 1);
-    var prob2 = new SlitherlinkProblem(3, 4);
-    prob2.setClue(1, 0, 1);
-    var cont = new SlitherlinkController([prob, prob2]);
+    var defaultProblem = new SlitherlinkProblem(1, 1);
+    defaultProblem.setClue(0, 0, 1);
+    var cont = new SlitherlinkController([defaultProblem]);
     var view = new SlitherlinkView();
 
     var canvas = document.getElementById("player");
@@ -72,4 +70,41 @@ $(document).ready(function () {
     view.setCanvas(canvas);
     cont.setView(view);
     setProblemIdBox();
+
+    var problemSrc;
+    if ((problemSrc = $('param[name="problem_src"]')).length > 0) {
+        var url = problemSrc.val();
+        $.ajax({
+            url: url,
+            type: "get",
+            dataType: "text"
+        }).done(function (data) {
+            data = data.split("\n");
+            var problems = [];
+            var currentProblem = null;
+            var row = 0;
+            for (var i = 0; i < data.length; ++i) {
+                if (currentProblem) {
+                    for (var j = 0; j < currentProblem.getWidth(); ++j) {
+                        var c = data[i].charAt(j);
+                        if (c == '0' || c == '1' || c == '2' || c == '3') {
+                            currentProblem.setClue(j, row, parseInt(c));
+                        }
+                    }
+                    if (++row == currentProblem.getHeight()) {
+                        problems.push(currentProblem);
+                        currentProblem = null;
+                    }
+                } else if (data[i].length >= 2) {
+                    var d = data[i].split(" ");
+                    var height = parseInt(d[0]), width = parseInt(d[1]);
+                    currentProblem = new SlitherlinkProblem(width, height);
+                    row = 0;
+                }
+            }
+            cont.setProblemSet(problems);
+            setProblemIdBox();
+        });
+    } else {
+    }
 });

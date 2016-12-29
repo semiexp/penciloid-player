@@ -42,6 +42,10 @@ SlitherlinkController.prototype.setZoom = function (z) {
     this.option.cellMaximumDistanceFromEdge = z * 4;
     this.option.maximumTapDistance = z * 2;
 }
+SlitherlinkController.prototype.setProblemSet = function (problems) {
+    this.problems = problems;
+    this.setProblemId(0);
+}
 SlitherlinkController.prototype.setProblemId = function (idx) {
     this.isFinished = false;
     this.undoHistory = [];

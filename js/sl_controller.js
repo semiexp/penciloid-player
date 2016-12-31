@@ -261,7 +261,7 @@ SlitherlinkController.prototype.performUndoAll = function () {
     while (this.undoHistory.length > 0) this.performUndo();
 }
 SlitherlinkController.prototype.performRedoAll = function () {
-    while (this.undoHistory.length > 0) this.performRedo();
+    while (this.redoHistory.length > 0) this.performRedo();
 }
 SlitherlinkController.prototype.zoomOut = function () {
     if (this.zoom <= 3) return;

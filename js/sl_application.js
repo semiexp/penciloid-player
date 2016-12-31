@@ -56,7 +56,7 @@ $(document).ready(function () {
             <polygon points="30,10 30,90 70,50" stroke="#000" fill="#000" /></svg>', function () { cont.performRedo(); }, true));
     $("#toolbar").append(createButton('<svg viewBox="0 0 100 100" height="20px" width="20px" style="vertical-align:-50%; position: relative; top: 50%;">\
             <polygon points="10,10 10,90 50,50" stroke="#000" fill="#000" />\
-            <polygon points="50,10 50,90 90,50" stroke="#000" fill="#000" /></svg>', function () { cont.performReddoAll(); }));
+            <polygon points="50,10 50,90 90,50" stroke="#000" fill="#000" /></svg>', function () { cont.performRedoAll(); }));
     $("#toolbar").append(createButton('<svg viewBox="0 0 100 100" height="20px" width="20px" style="vertical-align:-50%; position: relative; top: 50%;">\
             <polygon points="10,40 90,40 90,60 10,60" stroke="#000" fill="#000" /></svg>', function () { cont.zoomOut(); }));
     $("#toolbar").append(createButton('<svg viewBox="0 0 100 100" height="20px" width="20px" style="vertical-align:-50%; position: relative; top: 50%;">\

@@ -45,9 +45,9 @@ SlitherlinkView.prototype.drawAll = function () {
     ctx.font = (cellSize * 0.9) + "px 'Consolas'";
     ctx.textAlign = "center";
     ctx.textBaseline = "bottom";
-    for (var y = 0; y < field_height; ++y) {
-        for (var x = 0; x < field_width; ++x) {
-            var clue = field.getClue(y, x);
+    for (var x = 0; x < field_width; ++x) {
+        for (var y = 0; y < field_height; ++y) {
+            var clue = field.getClue(x, y);
             if (0 <= clue && clue <= 3) {
                 ctx.fillText(clue,
 					outerMargin + x * (dotSize + cellSize) + dotSize + cellSize / 2,

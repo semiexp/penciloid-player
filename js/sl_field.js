@@ -24,7 +24,7 @@ SlitherlinkField.prototype.setEdge = function (x, y, v) {
     this.data[y][x] = v;
 }
 SlitherlinkField.prototype.getClue = function (x, y) {
-    return this.data[x * 2 + 1][y * 2 + 1];
+    return this.data[y * 2 + 1][x * 2 + 1];
 }
 SlitherlinkField.prototype.isFinished = function () {
     // check number of edges

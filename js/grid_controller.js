@@ -3,6 +3,9 @@ function GridController() {
     this.height = -1;
     this.width = -1;
 
+    this.undoHistory = [];
+    this.redoHistory = [];
+
     // UI parameters
     this.offsetX = 10;
     this.offsetY = 10;
@@ -12,7 +15,7 @@ function GridController() {
     this.edgeThresholdDistance = 10;
     this.clickThresholdDistance = 5;
 
-    // Internal variables
+    // Internal variables for UI
     this.isClicking = false;
     this.movedDistance = 0;
     this.lastX = -1;
@@ -29,7 +32,37 @@ GridController.prototype.setField = function (field) {
     this.width = field.getWidth();
 }
 GridController.prototype.setEdge = function (x, y, e) {
+    this.redoHistory = [];
+    this.undoHistory.push({ x: x, y: y, state: this.field.getEdge(x, y) });
     this.field.setEdge(x, y, e);
+}
+GridController.prototype.performUndo = function () {
+    if (this.undoHistory.length == 0) return [];
+    var move = this.undoHistory.pop();
+    this.redoHistory.push({ x: move.x, y: move.y, state: this.field.getEdge(move.x, move.y) });
+    this.field.setEdge(move.x, move.y, move.state);
+    return [{ x: move.x, y: move.y }];
+}
+GridController.prototype.performRedo = function () {
+    if (this.redoHistory.length == 0) return [];
+    var move = this.redoHistory.pop();
+    this.undoHistory.push({ x: move.x, y: move.y, state: this.field.getEdge(move.x, move.y) });
+    this.field.setEdge(move.x, move.y, move.state);
+    return [{ x: move.x, y: move.y }];
+}
+GridController.prototype.performUndoAll = function () {
+    var ret = [];
+    while (this.undoHistory.length > 0) {
+        ret.push(this.performUndo()[0]);
+    }
+    return ret;
+}
+GridController.prototype.performRedoAll = function () {
+    var ret = [];
+    while (this.redoHistory.length > 0) {
+        ret.push(this.performRedo()[0]);
+    }
+    return ret;
 }
 GridController.prototype.mouseDown = function (x, y) {
     if (!this.field) return [];

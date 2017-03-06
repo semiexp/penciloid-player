@@ -64,7 +64,7 @@ GridController.prototype.performRedoAll = function () {
     }
     return ret;
 }
-GridController.prototype.mouseDown = function (x, y) {
+GridController.prototype.mouseDown = function (x, y, ignore) {
     if (!this.field) return [];
 
     this.isClicking = true;
@@ -78,8 +78,10 @@ GridController.prototype.mouseDown = function (x, y) {
     this.clickStartEdgeY = location.edgeY;
     this.lastVertexX = location.vertexX;
     this.lastVertexY = location.vertexY;
+
+    return [];
 }
-GridController.prototype.mouseMove = function (x, y) {
+GridController.prototype.mouseMove = function (x, y, ignore) {
     if (!this.field) return [];
     if (!this.isClicking) return [];
 
@@ -88,9 +90,11 @@ GridController.prototype.mouseMove = function (x, y) {
     this.lastY = y;
 
     if (this.movedDistance < this.clickThresholdDistance) return [];
+    if (ignore) return [];
 
     var location = this.getLocation(x, y);
     if (location.vertexX != -1) {
+        var ret = [];
         if (Math.abs(this.lastVertexX - location.vertexX) + Math.abs(this.lastVertexY - location.vertexY) == 1) {
             var ex = this.lastVertexX + location.vertexX;
             var ey = this.lastVertexY + location.vertexY;
@@ -99,25 +103,31 @@ GridController.prototype.mouseMove = function (x, y) {
                 if (this.dragMode != GridField.EDGE_LINE) {
                     this.setEdge(ex, ey, GridField.EDGE_UNDECIDED);
                     this.dragMode = GridField.EDGE_UNDECIDED;
+                    ret = [{ x: ex, y: ey }];
                 }
             } else {
                 if (this.dragMode != GridField.EDGE_UNDECIDED) {
                     this.setEdge(ex, ey, GridField.EDGE_LINE);
                     this.dragMode = GridField.EDGE_LINE;
+                    ret = [{ x: ex, y: ey }];
                 }
             }
         }
         this.lastVertexX = location.vertexX;
         this.lastVertexY = location.vertexY;
+        return ret;
     }
+    return [];
 }
-GridController.prototype.mouseUp = function (x, y) {
+GridController.prototype.mouseUp = function (x, y, ignore) {
     if (!this.field) return [];
 
     this.isClicking = false;
     this.movedDistance += Math.hypot(x - this.lastX, y - this.lastY);
     this.lastX = x;
     this.lastY = y;
+
+    if (ignore) return [];
 
     if (this.movedDistance < this.clickThresholdDistance) {
         var ex = this.clickStartEdgeX, ey = this.clickStartEdgeY;

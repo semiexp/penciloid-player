@@ -1,4 +1,4 @@
-function GridField(height, width) {
+function GridField(width, height) {
     this.height = height;
     this.width = width;
     this.data = [];
@@ -43,13 +43,13 @@ GridField.prototype.hasOneLoop = function () {
             var adjacentDestination = [];
             for (var i = 0; i < 4; ++i) {
                 var y2 = y * 2 + dy[i], x2 = x * 2 + dx[i];
-                if (0 <= y2 && y2 <= 2 * height && 0 <= x2 && x2 <= 2 * width && this.getEdge(y2, x2) == GridField.EDGE_LINE) {
+                if (0 <= y2 && y2 <= 2 * height && 0 <= x2 && x2 <= 2 * width && this.getEdge(x2, y2) == GridField.EDGE_LINE) {
                     adjacentDestination.push((y + dy[i]) * (width + 1) + (x + dx[i]));
                 }
             }
-            if (adjacentLines.length == 0) {
+            if (adjacentDestination.length == 0) {
                 mates.push([]);
-            } else if (adjacentLines.length == 2) {
+            } else if (adjacentDestination.length == 2) {
                 mates.push(adjacentDestination);
             } else return false;
         }

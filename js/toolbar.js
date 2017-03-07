@@ -18,13 +18,13 @@ function createButton(content, action, enableLongPress) {
             verticalAlign: "middle"
         },
         on: {
-            mouseover: function (event) {
+            mouseenter: function (event) {
                 btn.css({
                     border: "solid 1px #cccccc",
                     backgroundColor: "#dddddd"
                 });
             },
-            mouseout: function (event) {
+            mouseleave: function (event) {
                 btn.css({
                     border: "solid 1px #dddddd",
                     backgroundColor: "#eeeeee"

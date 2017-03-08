@@ -133,7 +133,6 @@ GridController.prototype.mouseUp = function (x, y, ignore) {
         var ex = this.clickStartEdgeX, ey = this.clickStartEdgeY;
         if (ex == -1) return [];
         var currentEdge = this.field.getEdge(ex, ey);
-        this.setEdge(ex, ey, (currentEdge + 1) % 3);
         if (currentEdge == GridField.EDGE_UNDECIDED) {
             this.setEdge(ex, ey, GridField.EDGE_BLANK);
         } else {

@@ -206,7 +206,7 @@ GridController.prototype.getLocation = function (x, y) {
             }
         };
         var checkCandidate = function (ex, ey) {
-            if (ex < 0 || ey < 0 || ex > self.height * 2 || ey > self.width * 2) return;
+            if (ex < 0 || ey < 0 || ex > self.width * 2 || ey > self.height * 2) return;
 
             var d = getDistance(ex, ey);
             if (d <= self.edgeThresholdDistance) {

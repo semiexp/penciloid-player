@@ -63,7 +63,6 @@ KakuroField.prototype.isFinished = function () {
                     used |= 1 << v;
                     currentSum += v;
                 }
-                console.log(expectedSum + "," + currentSum);
                 if (expectedSum != currentSum) return false;
                 currentValues = [];
             }
@@ -85,7 +84,6 @@ KakuroField.prototype.isFinished = function () {
                     used |= 1 << v;
                     currentSum += v;
                 }
-                console.log(expectedSum + "," + currentSum);
                 if (expectedSum != currentSum) return false;
                 currentValues = [];
             }

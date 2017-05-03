@@ -44,7 +44,9 @@ function NumericKeypad() {
             css: {
                 fontFamily: "Verdana, Roboto, 'Droid Sans', 'ƒƒCƒŠƒI', Meiryo, '‚l‚r ‚oƒSƒVƒbƒN', 'ƒqƒ‰ƒMƒmŠpƒS Pro W3', 'Hiragino Kaku Gothic ProN', sans-serif",
                 fontSize: this.cellSize * 0.9,
+                lineHeight: 1,
                 textAlign: "center",
+                verticalAlign: "middle",
                 display: "inline-block"
             }
         });

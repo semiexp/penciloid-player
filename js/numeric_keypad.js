@@ -42,7 +42,8 @@ function NumericKeypad() {
             width: this.cellSize,
             text: i,
             css: {
-                fontSize: this.cellSize,
+                fontFamily: "Verdana, Roboto, 'Droid Sans', 'ƒƒCƒŠƒI', Meiryo, '‚l‚r ‚oƒSƒVƒbƒN', 'ƒqƒ‰ƒMƒmŠpƒS Pro W3', 'Hiragino Kaku Gothic ProN', sans-serif",
+                fontSize: this.cellSize * 0.9,
                 textAlign: "center",
                 display: "inline-block"
             }

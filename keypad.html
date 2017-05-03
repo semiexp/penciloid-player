@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+<html lang="ja">
+<head>
+    <title>Keypad test</title>
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/numeric_keypad.js"></script>
+</head>
+<body>
+    <br /><br /><br />
+    (space) (space) (space) (space) (space)
+    <input type="button" value="click!" id="btn" />
+    <script>
+        $(function () {
+            var k = new NumericKeypad();
+            $("#btn").mousedown(function (e) {
+                k.displayKeypad(e.pageX, e.pageY, function (k) {
+                    console.log(k + " was selected");
+                });
+            });
+            $("#btn").bind("touchstart", function (e) {
+                e.preventDefault();
+                k.displayKeypad(e.originalEvent.touches[0].pageX, e.originalEvent.touches[0].pageY, function (k) {
+                    console.log(k + " was selected (via touch)");
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -11,6 +11,7 @@ function KakuroController(problems) {
     this.problems = problems;
     this.setProblemId(0);
 
+    this.keypad = new NumericKeypad();
     this.setZoom(3);
 }
 KakuroController.prototype.setView = function (view) {
@@ -26,6 +27,7 @@ KakuroController.prototype.setZoom = function (z) {
     this.option.lineWidth = Math.floor(z / 2);
     this.option.cellSize = z * 10;
     this.option.clueDiagonalLineWidth = this.option.lineWidth;
+    this.keypad.setCellSize(this.option.cellSize);
 }
 KakuroController.prototype.setProblemSet = function (problems) {
     this.problems = problems;
@@ -90,10 +92,21 @@ KakuroController.prototype.mouseDown = function (x, y) {
     var loc = this.getLocation(x, y);
     if (loc.x != -1 && loc.y != -1 && !this.isFinished && !this.field.isClue(loc.x, loc.y)) {
         var value = this.field.getValue(loc.x, loc.y);
-        if (value == -1) value = 1;
-        else if (value == 9) value = -1;
-        else value += 1;
-        this.updateCell(loc.x, loc.y, value);
+        if (value == -1) {
+            var canvasPos = $(this.view.canvas).offset();
+            var self = this;
+            this.keypad.displayKeypad(
+                x + canvasPos.left,
+                y + canvasPos.top,
+                function (sel) {
+                    if (sel != -1) {
+                        self.updateCell(loc.x, loc.y, sel);
+                    }
+                }
+                );
+        } else {
+            this.updateCell(loc.x, loc.y, -1);
+        }
     }
 }
 KakuroController.prototype.mouseUp = function (x, y) {

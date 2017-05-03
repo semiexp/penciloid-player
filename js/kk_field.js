@@ -18,7 +18,7 @@ function KakuroField(problem) {
                 });
             }
         }
-        this.clue.push(line);
+        this.field.push(line);
     }
 }
 KakuroField.CELL_CLUE = 0;
@@ -38,11 +38,16 @@ KakuroField.prototype.getClueHorizontal = function (x, y) {
 KakuroField.prototype.getClueVertical = function (x, y) {
     return this.field[y][x].clueVertical;
 }
+KakuroField.prototype.setValue = function (x, y, v) {
+    this.field[y][x].value = v;
+}
+KakuroField.prototype.getValue = function (x, y) {
+    return this.field[y][x].value;
+}
 KakuroField.prototype.isFinished = function () {
     var field = this.field;
     var height = this.height;
     var width = this.width;
-
     for (var y = 0; y < height; ++y) {
         var currentValues = [];
         for (var x = width - 1; x >= 0; --x) {
@@ -58,6 +63,7 @@ KakuroField.prototype.isFinished = function () {
                     used |= 1 << v;
                     currentSum += v;
                 }
+                console.log(expectedSum + "," + currentSum);
                 if (expectedSum != currentSum) return false;
                 currentValues = [];
             }
@@ -70,7 +76,7 @@ KakuroField.prototype.isFinished = function () {
             if (field[y][x].cellType == KakuroField.CELL_BLANK) {
                 currentValues.push(field[y][x].value);
             } else {
-                var expectedSum = field[y][x].clueHorizontal;
+                var expectedSum = field[y][x].clueVertical;
                 var currentSum = 0, used = 0;
                 for (var i = 0; i < currentValues.length; ++i) {
                     var v = currentValues[i];
@@ -79,6 +85,7 @@ KakuroField.prototype.isFinished = function () {
                     used |= 1 << v;
                     currentSum += v;
                 }
+                console.log(expectedSum + "," + currentSum);
                 if (expectedSum != currentSum) return false;
                 currentValues = [];
             }

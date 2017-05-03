@@ -32,8 +32,22 @@ KakuroProblem.prototype.getClueVertical = function (x, y) {
     return this.clue[y][x].clueVertical;
 }
 KakuroProblem.prototype.setClueHorizontal = function (x, y, v) {
+    if (this.clue[y][x].cellType == KakuroProblem.CELL_BLANK) {
+        this.clue[y][x] = {
+            cellType: KakuroProblem.CELL_CLUE,
+            clueHorizontal: 0,
+            clueVertical: 0
+        };
+    }
     this.clue[y][x].clueHorizontal = v;
 }
 KakuroProblem.prototype.setClueVertical = function (x, y, v) {
+    if (this.clue[y][x].cellType == KakuroProblem.CELL_BLANK) {
+        this.clue[y][x] = {
+            cellType: KakuroProblem.CELL_CLUE,
+            clueHorizontal: 0,
+            clueVertical: 0
+        };
+    }
     this.clue[y][x].clueVertical = v;
 }

@@ -91,6 +91,7 @@ NumericKeypad.prototype.displayKeypad = function (cx, cy, callback) {
     });
     keypad.show();
     this.isOpening = true;
+    this.selectKeyByPosition(cx, cy);
 }
 NumericKeypad.prototype.selectKeyByPosition = function (pageX, pageY) {
     if (!this.isOpening) return;

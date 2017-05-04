@@ -51,6 +51,11 @@ function NumericKeypad() {
                 display: "inline-block"
             }
         });
+        key.css("-ms-user-select", "none");
+        key.css("-moz-user-select", "-moz-none");
+        key.css("-khtml-user-select", "none");
+        key.css("-webkit-user-select", "none");
+        key.css("-user-select", "none");
         this.keypadFrame.append(key);
         this.keys[i] = key;
     }

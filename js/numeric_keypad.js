@@ -47,6 +47,7 @@ function NumericKeypad() {
                 lineHeight: 1,
                 textAlign: "center",
                 verticalAlign: "middle",
+                cursor: "default",
                 display: "inline-block"
             }
         });

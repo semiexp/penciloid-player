@@ -2,6 +2,8 @@ function NumericKeypad() {
     this.cellSize = 30;
     this.selectedKey = -1;
     this.isOpening = false;
+    this.centerX = -1;
+    this.centerY = -1;
     var self = this;
     this.keypadFrame = $("<div></div>", {
         height: this.cellSize * 3,
@@ -12,27 +14,6 @@ function NumericKeypad() {
             borderWidth: "2px",
             backgroundColor: "#ffffff",
             position: "absolute"
-        },
-        on: {
-            mouseup: function () {
-                self.finish();
-            },
-            mousemove: function (e) {
-                self.selectKeyByPosition(e.pageX, e.pageY);
-            },
-            mouseover: function (e) {
-                self.selectKeyByPosition(e.pageX, e.pageY);
-            },
-            touchstart: function (e) {
-                self.selectKeyByPosition(
-                    e.originalEvent.touches[0].pageX,
-                    e.originalEvent.touches[0].pageY
-                    );
-                e.preventDefault();
-            },
-            touchend: function () {
-                self.finish();
-            }
         }
     });
     this.keys = [];
@@ -64,6 +45,9 @@ function NumericKeypad() {
     $(window).on({
         mouseup: function () {
             self.finish();
+        },
+        mousemove: function (e) {
+            self.selectKeyByPosition(e.pageX, e.pageY);
         },
         touchmove: function (e) {
             self.selectKeyByPosition(
@@ -97,20 +81,25 @@ NumericKeypad.prototype.displayKeypad = function (cx, cy, callback) {
     });
     keypad.show();
     this.isOpening = true;
+    this.centerX = cx;
+    this.centerY = cy;
     this.selectKeyByPosition(cx, cy);
 }
 NumericKeypad.prototype.selectKeyByPosition = function (pageX, pageY) {
     if (!this.isOpening) return;
 
-    for (var i = 1; i <= 9; ++i) {
-        var keyOfs = this.keys[i].offset();
+    var dx = pageX - this.centerX;
+    var dy = pageY - this.centerY;
 
-        var dx = pageX - keyOfs.left;
-        var dy = pageY - keyOfs.top;
-        if (0 <= dx && dx < this.cellSize && 0 <= dy && dy < this.cellSize) {
-            this.selectKey(i);
-        }
-    }
+    var x_loc, y_loc;
+    if (dx < -this.cellSize / 2) x_loc = 0;
+    else if (dx < this.cellSize / 2) x_loc = 1;
+    else x_loc = 2;
+    if (dy < -this.cellSize / 2) y_loc = 0;
+    else if (dy < this.cellSize / 2) y_loc = 1;
+    else y_loc = 2;
+
+    this.selectKey(1 + x_loc + y_loc * 3);
 }
 NumericKeypad.prototype.selectKey = function (i) {
     if (!this.isOpening) return;

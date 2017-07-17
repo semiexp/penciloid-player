@@ -8,6 +8,9 @@ function KakuroController(problems) {
     this.undoHistory = [];
     this.redoHistory = [];
 
+    this.selectedX = -1;
+    this.selectedY = -1;
+
     this.problems = problems;
     this.setProblemId(0);
 
@@ -20,7 +23,7 @@ KakuroController.prototype.setView = function (view) {
     this.view.setOption(this.option);
 
     this.view.adjustCanvasSize();
-    this.view.drawAll();
+    this.view.drawAll(this.selectedX, this.selectedY);
 }
 KakuroController.prototype.setZoom = function (z) {
     this.zoom = z;
@@ -44,6 +47,9 @@ KakuroController.prototype.setProblemId = function (idx) {
     this.problemId = idx;
     this.field = new KakuroField(this.problems[idx]);
 
+    this.selectedX = -1;
+    this.selectedY = -1;
+
     if (this.view) {
         this.view.setField(this.field);
         this.view.adjustCanvasSize();
@@ -56,6 +62,14 @@ KakuroController.prototype.getProblemId = function () {
 KakuroController.prototype.getNumberOfProblems = function () {
     return this.problems.length;
 }
+KakuroController.prototype.selectCell = function (x, y) {
+    if (this.selectedX != -1) {
+        this.view.drawCell(this.selectedX, this.selectedY, false);
+    }
+    this.selectedX = x;
+    this.selectedY = y;
+    this.view.drawCell(x, y, true);
+}
 KakuroController.prototype.updateCell = function (x, y, v) {
     if (x < 0 || x >= this.field.getWidth() || y < 0 || y >= this.field.getHeight() || this.field.isClue(x, y) || this.field.getValue(x, y) == v) return;
     this.redoHistory = [];
@@ -63,7 +77,7 @@ KakuroController.prototype.updateCell = function (x, y, v) {
     this.field.setValue(x, y, v);
     this.isFinished = this.field.isFinished();
     if (this.view) {
-        this.view.drawCell(x, y);
+        this.view.drawCell(x, y, (x == this.selectedX && y == this.selectedY));
         this.view.drawIfComplete();
     }
 }
@@ -101,6 +115,7 @@ KakuroController.prototype.mouseDown = function (x, y) {
                 function (sel) {
                     if (sel != -1) {
                         self.updateCell(loc.x, loc.y, sel);
+                        self.selectCell(loc.x, loc.y);
                     }
                 }
                 );
@@ -115,6 +130,44 @@ KakuroController.prototype.mouseUp = function (x, y) {
 KakuroController.prototype.mouseMove = function (x, y) {
     // TODO: more user-friendly UI
 }
+KakuroController.prototype.keyDown = function (key) {
+    if (this.isFinished) return;
+    switch (key) {
+        case 37: // left
+            if (this.selectedX > 0) {
+                this.selectCell(this.selectedX - 1, this.selectedY);
+            }
+            break;
+        case 38: // up
+            if (this.selectedY > 0) {
+                this.selectCell(this.selectedX, this.selectedY - 1);
+            }
+            break;
+        case 39: // right
+            if (this.selectedX >= 0 && this.selectedX < this.field.getWidth() - 1) {
+                this.selectCell(this.selectedX + 1, this.selectedY);
+            }
+            break;
+        case 40: // down
+            if (this.selectedY >= 0 && this.selectedY < this.field.getHeight() - 1) {
+                this.selectCell(this.selectedX, this.selectedY + 1);
+            }
+            break;
+        case 49:
+        case 50:
+        case 51:
+        case 52:
+        case 53:
+        case 54:
+        case 55:
+        case 56:
+        case 57: // 1-9
+            if (this.selectedY >= 0 && !this.field.isClue(this.selectedX, this.selectedY)) {
+                this.updateCell(this.selectedX, this.selectedY, key - 48);
+            }
+            break;
+    }
+}
 KakuroController.prototype.performUndo = function () {
     if (this.undoHistory.length == 0) return;
     var undo = this.undoHistory.pop();
@@ -122,7 +175,7 @@ KakuroController.prototype.performUndo = function () {
     this.field.setValue(undo.x, undo.y, undo.value);
     this.isFinished = this.field.isFinished();
     if (this.view) {
-        this.view.drawCell(undo.x, undo.y);
+        this.view.drawCell(undo.x, undo.y, (undo.x == this.selectedX && undo.y == this.selectedY));
         this.view.drawIfComplete();
     }
 }
@@ -133,7 +186,7 @@ KakuroController.prototype.performRedo = function () {
     this.field.setValue(undo.x, undo.y, undo.value);
     this.isFinished = this.field.isFinished();
     if (this.view) {
-        this.view.drawCell(undo.x, undo.y);
+        this.view.drawCell(undo.x, undo.y, (undo.x == this.selectedX && undo.y == this.selectedY));
         this.view.drawIfComplete();
     }
 }
@@ -148,14 +201,14 @@ KakuroController.prototype.zoomOut = function () {
     this.setZoom(this.zoom - 1);
     if (this.view) {
         this.view.adjustCanvasSize();
-        this.view.drawAll();
+        this.view.drawAll(this.selectedX, this.selectedY);
     }
 }
 KakuroController.prototype.zoomIn = function () {
     this.setZoom(this.zoom + 1);
     if (this.view) {
         this.view.adjustCanvasSize();
-        this.view.drawAll();
+        this.view.drawAll(this.selectedX, this.selectedY);
     }
 }
 KakuroController.prototype.previousProblem = function () {

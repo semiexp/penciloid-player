@@ -45,6 +45,9 @@ $(document).ready(function () {
     canvas.addEventListener("mouseout", function (event) {
         cont.mouseUp(-32768, -32768);
     });
+    $(window).on("keydown", function (event) {
+        cont.keyDown(event.keyCode);
+    });
     canvas.addEventListener("contextmenu", function (e) { e.preventDefault(); });
     
     var problemIdBox = $("<span style='vertical-align:middle'></span>");
